@@ -1,0 +1,6 @@
+﻿  main_window.cpp
+C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\numerical methods _lab\main_window.cpp(8,33): warning C4829: Возможно, неправильные параметры функции main. Рекомендуемый вариант - "int main(Platform::Array<Platform::String^>^ argv)"
+  method.cpp
+  Создание кода...
+  main_window.obj : обнаружен модуль MSIL; для MSIL последовательная компоновка отключена; выполняется полная компоновка
+  numerical methods _lab.vcxproj -> C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\x64\Debug\numerical methods _lab.exe
