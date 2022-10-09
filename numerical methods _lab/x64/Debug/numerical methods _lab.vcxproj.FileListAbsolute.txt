@@ -1,4 +1,0 @@
-C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\numerical methods _lab\x64\Debug\numerical methods _lab.vcxproj.AssemblyReference.cache
-C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\numerical methods _lab\x64\Debug\numerical methods _lab.vcxproj.SuggestedBindingRedirects.cache
-C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\numerical methods _lab\x64\Debug\numericalmethodslab.main_window.resources
-C:\Users\xjaci\OneDrive\Рабочий стол\numerical methods\numerical methods _lab\numerical methods _lab\numerical methods _lab\x64\Debug\numerical methods _lab.vcxproj.GenerateResource.cache
