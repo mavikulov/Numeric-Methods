@@ -1,0 +1,7 @@
+1) Add control of the local step;
+2) Add switch between tasks 
+3) Add third task
+4) Check input correctness
+5) fill in the table
+6) fill in help section
+7) ....
