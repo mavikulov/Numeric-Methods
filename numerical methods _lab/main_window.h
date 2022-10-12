@@ -54,6 +54,14 @@ namespace numericalmethodslab {
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ method_start;
 	private: System::Windows::Forms::Button^ method_clear;
+	private: System::Windows::Forms::CheckBox^ control_step_cb;
+
+
+	private: System::Windows::Forms::TextBox^ x_max_tb;
+
+	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::TextBox^ x_min_tb;
+	private: System::Windows::Forms::Label^ label4;
 
 
 
@@ -88,6 +96,11 @@ namespace numericalmethodslab {
 			this->second_task = (gcnew System::Windows::Forms::Button());
 			this->first_task = (gcnew System::Windows::Forms::Button());
 			this->parameters_gb = (gcnew System::Windows::Forms::GroupBox());
+			this->x_max_tb = (gcnew System::Windows::Forms::TextBox());
+			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->x_min_tb = (gcnew System::Windows::Forms::TextBox());
+			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->control_step_cb = (gcnew System::Windows::Forms::CheckBox());
 			this->max_stp_tb = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->local_err_tb = (gcnew System::Windows::Forms::TextBox());
@@ -113,7 +126,6 @@ namespace numericalmethodslab {
 			this->test_task->TabIndex = 0;
 			this->test_task->Text = L"test";
 			this->test_task->UseVisualStyleBackColor = false;
-			this->test_task->Click += gcnew System::EventHandler(this, &main_window::button1_Click);
 			// 
 			// chart1
 			// 
@@ -131,14 +143,13 @@ namespace numericalmethodslab {
 			this->chart1->Name = L"chart1";
 			this->chart1->Palette = System::Windows::Forms::DataVisualization::Charting::ChartColorPalette::Bright;
 			series1->BorderColor = System::Drawing::Color::Transparent;
-			series1->BorderWidth = 2;
 			series1->ChartArea = L"ChartArea1";
 			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series1->Color = System::Drawing::Color::Blue;
 			series1->Legend = L"chart_legend";
 			series1->LegendText = L"true solution";
 			series1->Name = L"true_solution";
-			series2->BorderWidth = 2;
+			series2->BorderDashStyle = System::Windows::Forms::DataVisualization::Charting::ChartDashStyle::Dash;
 			series2->ChartArea = L"ChartArea1";
 			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series2->Color = System::Drawing::Color::Red;
@@ -165,7 +176,6 @@ namespace numericalmethodslab {
 			this->menu_gropbox->TabIndex = 4;
 			this->menu_gropbox->TabStop = false;
 			this->menu_gropbox->Text = L"menu";
-			this->menu_gropbox->Enter += gcnew System::EventHandler(this, &main_window::groupBox1_Enter);
 			// 
 			// exit_button
 			// 
@@ -203,6 +213,11 @@ namespace numericalmethodslab {
 			// 
 			// parameters_gb
 			// 
+			this->parameters_gb->Controls->Add(this->x_max_tb);
+			this->parameters_gb->Controls->Add(this->label5);
+			this->parameters_gb->Controls->Add(this->x_min_tb);
+			this->parameters_gb->Controls->Add(this->label4);
+			this->parameters_gb->Controls->Add(this->control_step_cb);
 			this->parameters_gb->Controls->Add(this->max_stp_tb);
 			this->parameters_gb->Controls->Add(this->label3);
 			this->parameters_gb->Controls->Add(this->local_err_tb);
@@ -211,10 +226,62 @@ namespace numericalmethodslab {
 			this->parameters_gb->Controls->Add(this->label1);
 			this->parameters_gb->Location = System::Drawing::Point(229, 12);
 			this->parameters_gb->Name = L"parameters_gb";
-			this->parameters_gb->Size = System::Drawing::Size(256, 206);
+			this->parameters_gb->Size = System::Drawing::Size(256, 252);
 			this->parameters_gb->TabIndex = 5;
 			this->parameters_gb->TabStop = false;
 			this->parameters_gb->Text = L"parameters";
+			// 
+			// x_max_tb
+			// 
+			this->x_max_tb->Location = System::Drawing::Point(101, 152);
+			this->x_max_tb->Name = L"x_max_tb";
+			this->x_max_tb->Size = System::Drawing::Size(146, 27);
+			this->x_max_tb->TabIndex = 11;
+			this->x_max_tb->Text = L"1";
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label5->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label5->Location = System::Drawing::Point(6, 152);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(104, 20);
+			this->label5->TabIndex = 10;
+			this->label5->Text = L"x maximum = ";
+			this->label5->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// x_min_tb
+			// 
+			this->x_min_tb->Location = System::Drawing::Point(101, 122);
+			this->x_min_tb->Name = L"x_min_tb";
+			this->x_min_tb->Size = System::Drawing::Size(146, 27);
+			this->x_min_tb->TabIndex = 9;
+			this->x_min_tb->Text = L"0";
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label4->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label4->Location = System::Drawing::Point(7, 122);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(101, 20);
+			this->label4->TabIndex = 8;
+			this->label4->Text = L"x minimum = ";
+			this->label4->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// control_step_cb
+			// 
+			this->control_step_cb->AutoSize = true;
+			this->control_step_cb->ForeColor = System::Drawing::SystemColors::Desktop;
+			this->control_step_cb->Location = System::Drawing::Point(6, 222);
+			this->control_step_cb->Name = L"control_step_cb";
+			this->control_step_cb->Size = System::Drawing::Size(219, 24);
+			this->control_step_cb->TabIndex = 7;
+			this->control_step_cb->Text = L"control h (const h by default)";
+			this->control_step_cb->UseVisualStyleBackColor = true;
+			this->control_step_cb->CheckedChanged += gcnew System::EventHandler(this, &main_window::control_step_cb_CheckedChanged);
 			// 
 			// max_stp_tb
 			// 
@@ -258,7 +325,7 @@ namespace numericalmethodslab {
 			// 
 			// initial_step_tb
 			// 
-			this->initial_step_tb->Location = System::Drawing::Point(98, 26);
+			this->initial_step_tb->Location = System::Drawing::Point(98, 32);
 			this->initial_step_tb->Name = L"initial_step_tb";
 			this->initial_step_tb->Size = System::Drawing::Size(149, 27);
 			this->initial_step_tb->TabIndex = 1;
@@ -269,7 +336,7 @@ namespace numericalmethodslab {
 			this->label1->AutoSize = true;
 			this->label1->FlatStyle = System::Windows::Forms::FlatStyle::System;
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->label1->Location = System::Drawing::Point(7, 27);
+			this->label1->Location = System::Drawing::Point(6, 33);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(96, 20);
 			this->label1->TabIndex = 0;
@@ -299,7 +366,7 @@ namespace numericalmethodslab {
 			this->value_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 50)));
 			this->value_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 50)));
 			this->value_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 50)));
-			this->value_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 55)));
+			this->value_table->ColumnStyles->Add((gcnew System::Windows::Forms::ColumnStyle(System::Windows::Forms::SizeType::Absolute, 61)));
 			this->value_table->ForeColor = System::Drawing::SystemColors::ControlText;
 			this->value_table->Location = System::Drawing::Point(230, 388);
 			this->value_table->Name = L"value_table";
@@ -312,7 +379,7 @@ namespace numericalmethodslab {
 			// method_start
 			// 
 			this->method_start->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->method_start->Location = System::Drawing::Point(284, 234);
+			this->method_start->Location = System::Drawing::Point(284, 280);
 			this->method_start->Name = L"method_start";
 			this->method_start->Size = System::Drawing::Size(152, 30);
 			this->method_start->TabIndex = 8;
@@ -323,7 +390,7 @@ namespace numericalmethodslab {
 			// method_clear
 			// 
 			this->method_clear->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->method_clear->Location = System::Drawing::Point(284, 280);
+			this->method_clear->Location = System::Drawing::Point(284, 325);
 			this->method_clear->Name = L"method_clear";
 			this->method_clear->Size = System::Drawing::Size(152, 30);
 			this->method_clear->TabIndex = 9;
@@ -367,21 +434,17 @@ namespace numericalmethodslab {
 		}
 #pragma endregion
 
-	private: double h, x, y_true, y_numerical;
-	private: double x_min, x_max;
+	private: double x_current, y_true, y_numerical;
+
 	private: System::Void main_window_Load(System::Object^ sender, System::EventArgs^ e);
 
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	}
-	private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) {
-	}
-	private: System::Void exit_button_Click(System::Object^ sender, System::EventArgs^ e) {
-		Application::Exit();
-	}
+	private: System::Void exit_button_Click(System::Object^ sender, System::EventArgs^ e);
+
 	private: System::Void method_clear_Click(System::Object^ sender, System::EventArgs^ e);
 
 	private: System::Void method_start_Click(System::Object^ sender, System::EventArgs^ e);
 
+	private: System::Void control_step_cb_CheckedChanged(System::Object^ sender, System::EventArgs^ e);
 
 };
 }

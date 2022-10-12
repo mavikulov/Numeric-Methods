@@ -1,4 +1,3 @@
-#include "main_window.h"
 #include "method.h"
 
 using namespace System;
@@ -13,13 +12,17 @@ void main(array<String^>^ args) {
 	Application::Run(% form);
 }
 
-//bool validate_textboxes(System::Windows::Forms::TextBox txt_1, System::Windows::Forms::TextBox txt_2, System::Windows::Forms::TextBox txt_3);
-
 System::Void numericalmethodslab::main_window::main_window_Load(System::Object^ sender, System::EventArgs^ e)
 {
 	this->chart1->Series[0]->Points->Clear();
 	this->chart1->Series[1]->Points->Clear();
 
+	return System::Void();
+}
+
+System::Void numericalmethodslab::main_window::exit_button_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	Application::Exit();
 	return System::Void();
 }
 
@@ -33,59 +36,44 @@ System::Void numericalmethodslab::main_window::method_clear_Click(System::Object
 
 System::Void numericalmethodslab::main_window::method_start_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	/*if (!validate_textboxes(numericalmethodslab::main_window::initial_step_tb, numericalmethodslab::main_window::max_stp_tb,
-		numericalmethodslab::main_window::local_err_tb));
-		MessageBox::Show("incorrect values in textboxes");*/
-
 	//method::task* tt = new method::test_task();
-	method::test_task t_t;
-	x_min = 0; x_max = 1; x = x_min;
-	h = System::Convert::ToDouble(this->initial_step_tb->Text);
+
+	double x_min = System::Convert::ToDouble(this->x_min_tb->Text);
+	double x_max = System::Convert::ToDouble(this->x_max_tb->Text);
+	double h = System::Convert::ToDouble(this->initial_step_tb->Text);
+
+	method::first_task t_t(h, x_min, x_max);
+
+	x_current = x_min;
 
 	this->chart1->Series[0]->Points->Clear();
 	this->chart1->Series[1]->Points->Clear();
 
-	std::vector<double> sol_tr = t_t.find_true_solution();
+	/*std::vector<double> sol_tr = t_t.find_true_solution();
 	for (const auto& val : sol_tr) {
 		y_true = val;
-		this->chart1->Series[0]->Points->AddXY(x, y_true);
-		x += h;
+		this->chart1->Series[0]->Points->AddXY(x_current, y_true);
+		x_current += h;
 	}
-	t_t.clear_data();
-	x = x_min;
+	x_current = x_min;
+
+	t_t.clear_data();*/
 	std::vector<double> sol_num = t_t.find_solution();
+	sol_num.pop_back();
 	for (const auto& val : sol_num) {
 		y_numerical = val;
-		this->chart1->Series[1]->Points->AddXY(x, y_numerical);
-		x += h;
+		this->chart1->Series[1]->Points->AddXY(x_current, y_numerical);
+		x_current += h;
 	}
-
-	//while (x <= x_max) {
-	//	y_true = sol_tr[x * 10];
-	////	y_numerical = sol_num[x * 10];
-	//	this->chart1->Series[0]->Points->AddXY(x, y_true);
-	//	//this->chart1->Series[1]->Points->AddXY(x, y_numerical);
-	//	x += h;
-	//}
-
-	/*while (x <= x_max) {
-		y_true = Math::Cos(x);
-		y_numerical = Math::Sin(x);
-		this->chart1->Series[0]->Points->AddXY(x, y_true);
-		this->chart1->Series[1]->Points->AddXY(x, y_numerical);
-		x += h;
-	}*/
-
 
 	return System::Void();
 }
 
-//bool validate_textboxes(System::Windows::Forms::TextBox txt_1, System::Windows::Forms::TextBox txt_2, System::Windows::Forms::TextBox txt_3) {
-//	if (System::String::IsNullOrEmpty(txt_1.Text) || System::String::IsNullOrEmpty(txt_3.Text)
-//		|| System::String::IsNullOrEmpty(txt_2.Text))
-//		return false;
-//	if (txt_1.Text->Contains(".") || txt_2.Text->Contains(".")
-//		|| txt_3.Text->Contains("."))
-//		return false;
-//	return true;
-//}
+System::Void numericalmethodslab::main_window::control_step_cb_CheckedChanged(System::Object^ sender, System::EventArgs^ e)
+{
+	//control_local_step = true;
+	//eps = System::Convert::ToDouble(local_err_tb->Text);
+	return System::Void();
+}
+
+
