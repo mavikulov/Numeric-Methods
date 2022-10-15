@@ -709,7 +709,9 @@ namespace numericalmethodslab {
 		}
 #pragma endregion
 
-	private: double x_current, y_true, y_true_neg, y_numerical, y_numerical_neg, h, x_min, x_max, max_steps;
+	private: double x_current, y_true, y_true_neg, y_numerical, y_numerical_neg, h_, x_min, x_max, max_steps;
+
+	private: double h_current, doub_current, div_current, diff_current, local_err_current, y_upd, abs_diff;
 
 	private: method::task* current_task;
 
