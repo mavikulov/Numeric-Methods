@@ -78,6 +78,21 @@ namespace numericalmethodslab {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ abs_difference;
 	private: System::Windows::Forms::CheckBox^ entry_v_negative;
 	private: System::Windows::Forms::CheckBox^ entry_v_positive;
+	private: System::Windows::Forms::TabControl^ tab_table;
+	private: System::Windows::Forms::TabPage^ page_pos;
+	private: System::Windows::Forms::TabPage^ page_neg;
+	private: System::Windows::Forms::DataGridView^ data_table_neg;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn1;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn2;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn3;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn4;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn5;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn6;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn7;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn8;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn9;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn10;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn11;
 
 
 
@@ -142,10 +157,29 @@ namespace numericalmethodslab {
 			this->division = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->doubling = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->abs_difference = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->tab_table = (gcnew System::Windows::Forms::TabControl());
+			this->page_pos = (gcnew System::Windows::Forms::TabPage());
+			this->page_neg = (gcnew System::Windows::Forms::TabPage());
+			this->data_table_neg = (gcnew System::Windows::Forms::DataGridView());
+			this->dataGridViewTextBoxColumn1 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn2 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn4 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn5 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn6 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn7 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn8 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn9 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn10 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn11 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->menu_gropbox->SuspendLayout();
 			this->parameters_gb->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table))->BeginInit();
+			this->tab_table->SuspendLayout();
+			this->page_pos->SuspendLayout();
+			this->page_neg->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table_neg))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// test_task
@@ -373,7 +407,6 @@ namespace numericalmethodslab {
 			this->control_step_cb->TabIndex = 7;
 			this->control_step_cb->Text = L"control h (const h by default)";
 			this->control_step_cb->UseVisualStyleBackColor = true;
-			this->control_step_cb->CheckedChanged += gcnew System::EventHandler(this, &main_window::control_step_cb_CheckedChanged);
 			// 
 			// max_stp_tb
 			// 
@@ -474,9 +507,9 @@ namespace numericalmethodslab {
 					this->h_index, this->v_index, this->v_index_corr, this->v_diff, this->loc_err_est, this->v_index_updated, this->division, this->doubling,
 					this->abs_difference
 			});
-			this->data_table->Location = System::Drawing::Point(229, 387);
+			this->data_table->Location = System::Drawing::Point(2, 6);
 			this->data_table->Name = L"data_table";
-			this->data_table->Size = System::Drawing::Size(565, 267);
+			this->data_table->Size = System::Drawing::Size(565, 251);
 			this->data_table->TabIndex = 10;
 			// 
 			// index
@@ -534,13 +567,114 @@ namespace numericalmethodslab {
 			this->abs_difference->HeaderText = L"|u_i - v_i|";
 			this->abs_difference->Name = L"abs_difference";
 			// 
+			// tab_table
+			// 
+			this->tab_table->Controls->Add(this->page_pos);
+			this->tab_table->Controls->Add(this->page_neg);
+			this->tab_table->Location = System::Drawing::Point(229, 361);
+			this->tab_table->Name = L"tab_table";
+			this->tab_table->SelectedIndex = 0;
+			this->tab_table->Size = System::Drawing::Size(575, 293);
+			this->tab_table->TabIndex = 11;
+			// 
+			// page_pos
+			// 
+			this->page_pos->Controls->Add(this->data_table);
+			this->page_pos->Location = System::Drawing::Point(4, 29);
+			this->page_pos->Name = L"page_pos";
+			this->page_pos->Padding = System::Windows::Forms::Padding(3);
+			this->page_pos->Size = System::Drawing::Size(567, 260);
+			this->page_pos->TabIndex = 0;
+			this->page_pos->Text = L"data table (positive)";
+			this->page_pos->UseVisualStyleBackColor = true;
+			// 
+			// page_neg
+			// 
+			this->page_neg->Controls->Add(this->data_table_neg);
+			this->page_neg->Location = System::Drawing::Point(4, 29);
+			this->page_neg->Name = L"page_neg";
+			this->page_neg->Padding = System::Windows::Forms::Padding(3);
+			this->page_neg->Size = System::Drawing::Size(567, 260);
+			this->page_neg->TabIndex = 1;
+			this->page_neg->Text = L"data table(negative)";
+			this->page_neg->UseVisualStyleBackColor = true;
+			// 
+			// data_table_neg
+			// 
+			this->data_table_neg->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->data_table_neg->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(11) {
+				this->dataGridViewTextBoxColumn1,
+					this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3, this->dataGridViewTextBoxColumn4, this->dataGridViewTextBoxColumn5,
+					this->dataGridViewTextBoxColumn6, this->dataGridViewTextBoxColumn7, this->dataGridViewTextBoxColumn8, this->dataGridViewTextBoxColumn9,
+					this->dataGridViewTextBoxColumn10, this->dataGridViewTextBoxColumn11
+			});
+			this->data_table_neg->Location = System::Drawing::Point(1, 5);
+			this->data_table_neg->Name = L"data_table_neg";
+			this->data_table_neg->Size = System::Drawing::Size(565, 251);
+			this->data_table_neg->TabIndex = 11;
+			// 
+			// dataGridViewTextBoxColumn1
+			// 
+			this->dataGridViewTextBoxColumn1->HeaderText = L"i";
+			this->dataGridViewTextBoxColumn1->Name = L"dataGridViewTextBoxColumn1";
+			// 
+			// dataGridViewTextBoxColumn2
+			// 
+			this->dataGridViewTextBoxColumn2->HeaderText = L"x_i";
+			this->dataGridViewTextBoxColumn2->Name = L"dataGridViewTextBoxColumn2";
+			// 
+			// dataGridViewTextBoxColumn3
+			// 
+			this->dataGridViewTextBoxColumn3->HeaderText = L"h_i";
+			this->dataGridViewTextBoxColumn3->Name = L"dataGridViewTextBoxColumn3";
+			// 
+			// dataGridViewTextBoxColumn4
+			// 
+			this->dataGridViewTextBoxColumn4->HeaderText = L"v_i";
+			this->dataGridViewTextBoxColumn4->Name = L"dataGridViewTextBoxColumn4";
+			// 
+			// dataGridViewTextBoxColumn5
+			// 
+			this->dataGridViewTextBoxColumn5->HeaderText = L"v^i";
+			this->dataGridViewTextBoxColumn5->Name = L"dataGridViewTextBoxColumn5";
+			// 
+			// dataGridViewTextBoxColumn6
+			// 
+			this->dataGridViewTextBoxColumn6->HeaderText = L"v_i - v^i";
+			this->dataGridViewTextBoxColumn6->Name = L"dataGridViewTextBoxColumn6";
+			// 
+			// dataGridViewTextBoxColumn7
+			// 
+			this->dataGridViewTextBoxColumn7->HeaderText = L"loc_err_est";
+			this->dataGridViewTextBoxColumn7->Name = L"dataGridViewTextBoxColumn7";
+			// 
+			// dataGridViewTextBoxColumn8
+			// 
+			this->dataGridViewTextBoxColumn8->HeaderText = L"v_i_upd";
+			this->dataGridViewTextBoxColumn8->Name = L"dataGridViewTextBoxColumn8";
+			// 
+			// dataGridViewTextBoxColumn9
+			// 
+			this->dataGridViewTextBoxColumn9->HeaderText = L"div";
+			this->dataGridViewTextBoxColumn9->Name = L"dataGridViewTextBoxColumn9";
+			// 
+			// dataGridViewTextBoxColumn10
+			// 
+			this->dataGridViewTextBoxColumn10->HeaderText = L"doub.";
+			this->dataGridViewTextBoxColumn10->Name = L"dataGridViewTextBoxColumn10";
+			// 
+			// dataGridViewTextBoxColumn11
+			// 
+			this->dataGridViewTextBoxColumn11->HeaderText = L"|u_i - v_i|";
+			this->dataGridViewTextBoxColumn11->Name = L"dataGridViewTextBoxColumn11";
+			// 
 			// main_window
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 20);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::SystemColors::HighlightText;
 			this->ClientSize = System::Drawing::Size(1190, 666);
-			this->Controls->Add(this->data_table);
+			this->Controls->Add(this->tab_table);
 			this->Controls->Add(this->method_clear);
 			this->Controls->Add(this->method_start);
 			this->Controls->Add(this->help_gb);
@@ -566,12 +700,16 @@ namespace numericalmethodslab {
 			this->parameters_gb->ResumeLayout(false);
 			this->parameters_gb->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table))->EndInit();
+			this->tab_table->ResumeLayout(false);
+			this->page_pos->ResumeLayout(false);
+			this->page_neg->ResumeLayout(false);
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table_neg))->EndInit();
 			this->ResumeLayout(false);
 
 		}
 #pragma endregion
 
-	private: double x_current, y_true, y_numerical;
+	private: double x_current, y_true, y_true_neg, y_numerical, y_numerical_neg, h, x_min, x_max, max_steps;
 
 	private: method::task* current_task;
 
@@ -583,11 +721,21 @@ namespace numericalmethodslab {
 
 	private: System::Void method_start_Click(System::Object^ sender, System::EventArgs^ e);
 
-	private: System::Void control_step_cb_CheckedChanged(System::Object^ sender, System::EventArgs^ e);
-
 	private: System::Void clear_all();
 
-	private: method::initial_conditions initialize_all();
+	private: method::initial_conditions initialize_vars();
+
+	private: System::Void clear_chart();
+
+	private: System::Void clear_table();
+
+	private: System::Void fill_datagrid(size_t);
+
+	private: System::Void draw_test_t();
+
+	private: System::Void draw_first_t();
+
+	private: System::Void draw_second_t();
 
 	private: System::Void test_task_Click(System::Object^ sender, System::EventArgs^ e);
 
