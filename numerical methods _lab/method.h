@@ -27,10 +27,8 @@ namespace method {
 
 	class task {
 	public:
-		/*task(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1)
-			: h(h_), x_min(x_min_), x_max(x_max_) {}*/
-
 		task() = default;
+
 		virtual ~task() {}
 
 		virtual double problem(double, double) = 0;
@@ -38,25 +36,30 @@ namespace method {
 		void clear_data() {
 			dots.clear();
 			dots.resize(0);
+
 			true_dots.clear();
 			true_dots.resize(0);
+
+			if (in_cond.control_local_err) {
+				half_step_d.clear();
+				half_step_d.resize(0);
+			}
 		};
 
-		//void initialize(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1) {
-		//	//h = h_;
-		//	x_min = x_min_;
-		//	x_max = x_max_;
-		//}
+		void initialize(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1) {
+			step = in_cond.h;
+			x_min = in_cond.x_min;
+			x_max = in_cond.x_max;
+		}
 
 		void half_step(double e_u, double h_) {
 			double e_v = e_u, e_x = e_u;
-			//std::vector<double> half_step_d;
 
 			half_step_d.push_back(e_v);
 			dots.push_back(e_v);
 			m_vars.v_upd.push_back(e_v);
 			m_vars.difference.push_back(0);
-			m_vars.current_h.push_back(in_cond.h);
+			m_vars.current_h.push_back(step);
 			m_vars.doublings.push_back(0);
 			m_vars.divisions.push_back(0);
 
@@ -69,20 +72,19 @@ namespace method {
 			m_vars.local_err.push_back(0);
 			double s;
 
-			double x_curr = in_cond.x_min;
-			double x_curr_h = in_cond.x_min;
-			//for (double x_curr = /*x_min*/in_cond.x_min, x_curr_h = /*x_min*/in_cond.x_min;  x_curr <= /*x_max*/in_cond.x_max
-				//&& x_curr_h <= in_cond.x_max; /*x_curr += h*/x_curr += in_cond.h, x_curr_h += h_ / 2) {
-			while(x_curr <= in_cond.x_max){
+			double x_curr = x_min;
+			double x_curr_h = x_min;
+
+			while(x_curr <= x_max){
 
 				if (counter_h % 2 == 0) {
-					x_curr += in_cond.h;
+					x_curr += step;
 					k_1 = problem(dots[counter],0);
-					k_2 = problem(dots[counter] + in_cond.h / 2 * k_1, 0);
-					k_3 = problem(dots[counter] + in_cond.h / 2 * k_2, 0);
-					k_4 = problem(dots[counter] + in_cond.h * k_3, 0);
+					k_2 = problem(dots[counter] + step / 2 * k_1, 0);
+					k_3 = problem(dots[counter] + step / 2 * k_2, 0);
+					k_4 = problem(dots[counter] + step * k_3, 0);
 					++counter;
-					dots.push_back(dots[counter - 1] + in_cond.h / 6 * (k_1 + 2 * k_2 + 2 * k_3 + k_4));
+					dots.push_back(dots[counter - 1] + step / 6 * (k_1 + 2 * k_2 + 2 * k_3 + k_4));
 				}
 
 				x_curr_h += h_ / 2;
@@ -93,47 +95,49 @@ namespace method {
 				++counter_h;
 				half_step_d.push_back(half_step_d[counter_h - 1] + h_ / 12 * (k_1_h + 2 * k_2_h + 2 * k_3_h + k_4_h));
 
-				if (counter_h == counter * 2) {
-					s = (half_step_d[counter_h] - dots[counter]) / (std::pow(2, 4) - 1);
-					if ((std::abs(s) >= in_cond.epsilon / std::pow(2, 5)) 
-						&& (std::abs(s) <= in_cond.epsilon)) {
-						m_vars.local_err.push_back(s * std::pow(2, 4));
+				if (half_step_d.size() % 2 != 0 && half_step_d.size() != 1) {
+					s = (half_step_d[counter_h] - dots[counter]) / 15;
+					if (std::abs(s) >= (in_cond.epsilon / 15) 
+						&& std::abs(s) <= in_cond.epsilon) {
+						m_vars.local_err.push_back(s * 16);
 						m_vars.difference.push_back(dots[counter] - half_step_d[counter_h]);
 						m_vars.v_upd.push_back(dots[counter] + m_vars.local_err[counter]);
-						m_vars.current_h.push_back(in_cond.h);
+						m_vars.current_h.push_back(step);
+
+						counter_h = 0;	//--
+						half_step_d.clear();  //--
+						half_step_d.push_back(dots[counter]); //--
 					}
-					if (std::abs(s) < (in_cond.epsilon / std::pow(2, 5))) {
-						in_cond.h *= 2;
+					if (std::abs(s) < (in_cond.epsilon / 32)) {
+						step *= 2;
 						m_vars.doublings.push_back(++doub);
-						m_vars.local_err.push_back(s * std::pow(2, 4));
+						m_vars.local_err.push_back(s * 16);
 						m_vars.difference.push_back(dots[counter] - half_step_d[counter_h]);
 						m_vars.v_upd.push_back(dots[counter] + m_vars.local_err[counter]);
-						m_vars.current_h.push_back(in_cond.h);
+						m_vars.current_h.push_back(step);
+
+						counter_h = 0;//--
+						half_step_d.clear();//--
+						half_step_d.push_back(dots[counter]);//--
 					}
 					if (std::abs(s) > in_cond.epsilon) {
-						x_curr -= in_cond.h; // --
-						x_curr_h -= h_; // --
-						in_cond.h /= 2;
-						m_vars.current_h.push_back(in_cond.h);
+						x_curr -= step; 
+						x_curr_h -= h_; 
+						step /= 2;
+						m_vars.current_h.push_back(step);
 						m_vars.divisions.push_back(++div);
-						dots.pop_back();
-						half_step_d.pop_back();
-						half_step_d.pop_back();
 						--counter;
-						counter_h -= 2;;
-						//counter = 0;
-						//counter_h = 0;
-						//x_curr = /*x_min*/in_cond.x_min;
-						//x_curr_h = /*x_min*/in_cond.x_min;
-						//dots.clear();
-						//half_step_d.clear();
-						//half_step_d.push_back(e_v);
-						//dots.push_back(e_v);
+						dots.pop_back();
+						half_step_d.clear();//--
+						half_step_d.push_back(dots[counter]);//--
+						//half_step_d.pop_back();
+						//half_step_d.pop_back();
+						counter_h = 0; //--
+						//counter_h -= 2;
 					}
 				}
 
 			}
-			//return dots;
 		}
 
 		std::vector<double> find_solution(double e_u, double h_, bool control) {
@@ -146,7 +150,7 @@ namespace method {
 				size_t counter = 0;
 				double k_1, k_2, k_3, k_4;
 
-				for (double x_curr = /*x_min*/in_cond.x_min; x_curr <= /*x_max*/in_cond.x_max; /*x_curr += h*/x_curr += in_cond.h) {
+				for (double x_curr = x_min; x_curr <= x_max; x_curr += step) {
 					k_1 = problem(dots[counter], 0);
 					k_2 = problem(dots[counter] + h_ / 2 * k_1, 0);
 					k_3 = problem(dots[counter] + h_ / 2 * k_2, 0);
@@ -159,23 +163,24 @@ namespace method {
 		}
 
 		std::vector<double> find_true_solution(double c_) {
-			double x_curr = /*x_min*/in_cond.x_min;
+			double x_curr = x_min;
 			double u = 0;
 			double c = c_;
-			while (x_curr <= /*x_max*/in_cond.x_max) {
+			m_vars.current_h.push_back(in_cond.h);
+			while (x_curr <= x_max) {
 				u = c / std::pow(std::exp(1.0), 5 / 2 * x_curr);
 				true_dots.push_back(u);
-				//x_curr += h;
-				x_curr += m_vars.current_h[0];
+				x_curr += step;
+				m_vars.current_h.push_back(x_curr);
 			}
 			return true_dots;
 		};
 
 	protected:
 		std::vector<double> dots;
-		//double h;
-		//double x_min;
-		//double x_max;
+		double step;
+		double x_min;
+		double x_max;
 	private:
 		std::vector<double> true_dots;
 		std::vector<double> half_step_d;
@@ -183,39 +188,17 @@ namespace method {
 
 	class test_task : public task {
 	public:
-
-		/*test_task(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1)
-			: task(h_, x_min_, x_max_) {}*/
-
 		test_task() = default;
 
 		double problem(double u, double x = 0) override {
 			return (-1) * 5 / 2 * u;
 		}
 
-		/*std::vector<double> find_true_solution() {
-			double x_curr = x_min;
-			double u = 0;
-			while (x_curr <= x_max) {
-				u = std::pow(std::exp(1.0), -5 / 2 * x_curr);
-				true_dots.push_back(u);
-				x_curr += h;
-			}
-			return true_dots;
-		};*/
-
 		~test_task(){}
-
-	/*private:
-		std::vector<double> true_dots;*/
 	};
 
 	class first_task : public task {
 	public:
-
-		/*first_task(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1)
-			: task(h_, x_min_, x_max_) {}*/
-
 		first_task() = default;
 
 		double problem(double u, double x) override {
@@ -229,9 +212,6 @@ namespace method {
 
 	class second_task : public task {
 		public:
-
-		/*second_task(double h_ = 0.1, double x_min_ = 0, double x_max_ = 1)
-			: task(h_, x_min_, x_max_) {}*/
 
 		second_task() = default;
 

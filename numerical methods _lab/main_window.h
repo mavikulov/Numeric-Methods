@@ -733,6 +733,10 @@ namespace numericalmethodslab {
 
 	private: System::Void fill_datagrid(size_t);
 
+	private: System::Void draw_true_s();
+
+	private: System::Void draw_numerical_s();
+
 	private: System::Void draw_test_t();
 
 	private: System::Void draw_first_t();
