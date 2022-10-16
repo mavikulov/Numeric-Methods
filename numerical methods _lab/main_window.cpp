@@ -46,9 +46,13 @@ System::Void numericalmethodslab::main_window::method_start_Click(System::Object
 	x_min = method::in_cond.x_min;
 	x_max = method::in_cond.x_max;
 
-	chart1->ChartAreas[0]->AxisX->Minimum = 0;
-	chart1->ChartAreas[0]->AxisX->Maximum = 1;
-	chart1->ChartAreas[0]->AxisX->Interval = 0.05;
+	//chart1->ChartAreas[0]->AxisX->Minimum = 0;
+	//chart1->ChartAreas[0]->AxisX->Maximum = 1;
+	//chart1->ChartAreas[0]->AxisX->Interval = 0.05;
+
+	//chart1->ChartAreas[0]->AxisY->Minimum = 0;
+	//chart1->ChartAreas[0]->AxisY->Maximum = 1;
+	//chart1->ChartAreas[0]->AxisY->Interval = 0.05;
 
 	//this->chart1->Series[0]; // true positive
 	//this->chart1->Series[1]; // true negative 
@@ -57,8 +61,8 @@ System::Void numericalmethodslab::main_window::method_start_Click(System::Object
 
 	if (dynamic_cast<method::test_task*>(current_task))
 		draw_test_t();
-	else if (dynamic_cast<method::first_task*>(current_task))
-		draw_first_t();
+	//else if (dynamic_cast<method::first_task*>(current_task))
+		//draw_first_t();
 
 	return System::Void();
 }
@@ -138,7 +142,7 @@ System::Void numericalmethodslab::main_window::fill_datagrid(size_t index)
 		data_table_neg->Rows[index]->Cells[0]->Value = index;
 		data_table_neg->Rows[index]->Cells[1]->Value = x_current;
 		data_table_neg->Rows[index]->Cells[2]->Value = h_;
-		data_table_neg->Rows[index]->Cells[3]->Value = y_numerical_neg;
+		data_table_neg->Rows[index]->Cells[3]->Value = /*y_numerical_neg*/0;
 		data_table_neg->Rows[index]->Cells[4]->Value = /*y_half*/0;
 		data_table_neg->Rows[index]->Cells[5]->Value = /*diff_current_neg*/0;
 		data_table_neg->Rows[index]->Cells[6]->Value = /*local_err_current*/0;
@@ -154,16 +158,19 @@ System::Void numericalmethodslab::main_window::fill_datagrid(size_t index)
 
 System::Void numericalmethodslab::main_window::draw_true_s()
 {
-	size_t index = 0;
-	x_current = x_min;
+	std::map<double, double> sol_true;
+	
+	if (entry_v_positive->Checked && !entry_v_negative->Checked)
+		sol_true = current_task->find_true_solution(method::in_cond.e_u);
 
-	std::vector<double> sol_true = current_task->find_true_solution(method::in_cond.e_u);
+	if (!entry_v_positive->Checked && entry_v_negative->Checked)
+		sol_true = current_task->find_true_solution(method::in_cond.e_u_neg);
 
-	while (x_current <= x_max) {
-		y_true = sol_true[index];
-		chart1->Series[0]->Points->AddXY(x_current, y_true);
-		x_current += method::in_cond.h;
-		++index;
+	for (const auto& kv : sol_true) {
+		if (entry_v_positive->Checked && !entry_v_negative->Checked)
+			chart1->Series[0]->Points->AddXY(kv.first, kv.second);
+		if (!entry_v_positive->Checked && entry_v_negative->Checked)
+			chart1->Series[1]->Points->AddXY(kv.first, kv.second);
 	}
 
 	return System::Void();
@@ -171,26 +178,22 @@ System::Void numericalmethodslab::main_window::draw_true_s()
 
 System::Void numericalmethodslab::main_window::draw_numerical_s()
 {
-	size_t index = 0;
-	x_current = x_min;
+	std::map<double, double> sol_num;
 
-	std::vector<double> sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u, h_, 1)
-		: current_task->find_solution(method::in_cond.e_u, h_, 0);
+	if (entry_v_positive->Checked && !entry_v_negative->Checked)
+		sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u, 1)
+		: current_task->find_solution(method::in_cond.e_u, 0);
 
-	while (x_current <= x_max) {
-		y_numerical = sol_num[index];
+	if (!entry_v_positive->Checked && entry_v_negative->Checked)
+		sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u_neg, 1)
+		: current_task->find_solution(method::in_cond.e_u_neg, 0);
 
-		//abs_diff = std::abs(sol_true[index] - sol_num[index]);
-		//h_current = method::m_vars.current_h[index];
-		//diff_current = method::m_vars.difference[index];
-		//local_err_current = method::m_vars.local_err[index];
-		//y_upd = method::m_vars.v_upd[index];
-		//div_current = method::m_vars.divisions[index];
-		//doub_current = method::m_vars.doublings[index];
+	for (const auto& kv : sol_num) {
+		if (entry_v_positive->Checked && !entry_v_negative->Checked) 
+			chart1->Series[2]->Points->AddXY(kv.first, kv.second);
 
-		chart1->Series[2]->Points->AddXY(x_current, y_numerical);
-		x_current += method::in_cond.control_local_err ? method::m_vars.current_h[index] : method::in_cond.h;
-		++index;
+		if (!entry_v_positive->Checked && entry_v_negative->Checked)
+			chart1->Series[3]->Points->AddXY(kv.first, kv.second);
 	}
 
 	return System::Void();
@@ -198,163 +201,10 @@ System::Void numericalmethodslab::main_window::draw_numerical_s()
 
 System::Void numericalmethodslab::main_window::draw_test_t()
 {
-	if (entry_v_positive->Checked && !entry_v_negative->Checked) {
-
+	//if (entry_v_positive->Checked && !entry_v_negative->Checked) {
 		draw_true_s();
 		draw_numerical_s();
-
-		/*std::vector<double> sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u,h_,1) 
-			: current_task->find_solution(method::in_cond.e_u, h_, 0);
-		data_table->RowCount = sol_num.size();*/
-
-		/*while (x_current <= x_max && index != sol_num.size()) {
-			y_numerical = sol_num[index];
-			abs_diff = std::abs(sol_true[index] - sol_num[index]);
-			h_current = method::m_vars.current_h[index];
-			h_current = method::m_vars.current_h[index];
-			diff_current = method::m_vars.difference[index];
-			local_err_current = method::m_vars.local_err[index];
-			y_upd = method::m_vars.v_upd[index];
-			div_current = method::m_vars.divisions[index];
-			doub_current = method::m_vars.doublings[index];
-			chart1->Series[2]->Points->AddXY(x_current, y_numerical);
-			x_current = method::m_vars.current_h[index];
-			fill_datagrid(index);
-			++index;
-		}*/
-	} 
-
-	//if (!entry_v_positive->Checked && entry_v_negative->Checked) {
-
-	//	std::vector<double> sol_num_neg = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u_neg, h_, 1)
-	//		: current_task->find_solution(method::in_cond.e_u_neg, h_, 0);
-	//	std::vector<double> sol_true_neg = current_task->find_true_solution(method::in_cond.e_u_neg);
-	//	//sol_num_neg.pop_back();
-	//	data_table_neg->RowCount = sol_num_neg.size();
-
-	//	while (x_current <= x_max && index != sol_num_neg.size() /*- 1*/) {
-	//		y_numerical_neg = sol_num_neg[index];
-	//		y_true_neg = sol_true_neg[index];
-	//		chart1->Series[1]->Points->AddXY(x_current, y_true_neg);
-	//		chart1->Series[3]->Points->AddXY(x_current, y_numerical_neg);
-
-	//		x_current += h_;
-
-	//		fill_datagrid(index);
-
-	//		++index;
-	//	}
-	//}
-
-	//if (entry_v_positive->Checked && entry_v_negative->Checked) {
-	//	std::vector<double> sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u, h_, 1)
-	//		: current_task->find_solution(method::in_cond.e_u, h_, 0);
-	//	std::vector<double> sol_true = current_task->find_true_solution(method::in_cond.e_u);
-	//	//sol_num.pop_back();
-
-	//	current_task->clear_data();
-	//	std::vector<double> sol_num_neg = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u_neg, h_, 1)
-	//		: current_task->find_solution(method::in_cond.e_u_neg, h_, 0);
-	//	std::vector<double> sol_true_neg = current_task->find_true_solution(method::in_cond.e_u_neg);
-	//	//sol_num_neg.pop_back();
-
-	//	data_table->RowCount = sol_num.size();
-	//	data_table_neg->RowCount = sol_num_neg.size();
-
-	//	while (x_current <= x_max && index < sol_num.size() /*- 1*/) {
-	//		y_numerical = sol_num[index];
-	//		y_true = sol_true[index];
-	//		y_numerical_neg = sol_num_neg[index];
-	//		y_true_neg = sol_true_neg[index];
-	//		chart1->Series[0]->Points->AddXY(x_current, y_true);
-	//		chart1->Series[1]->Points->AddXY(x_current, y_true_neg);
-	//		chart1->Series[2]->Points->AddXY(x_current, y_numerical);
-	//		chart1->Series[3]->Points->AddXY(x_current, y_numerical_neg);
-	//		x_current += h_;
-
-	//		fill_datagrid(index);
-
-	//		++index;
-	//	}
-	//}
-
-	return System::Void();
-}
-
-System::Void numericalmethodslab::main_window::draw_first_t()
-{
-	size_t index = 0;
-	x_current = x_min;
-
-	if (entry_v_positive->Checked && !entry_v_negative->Checked) {
-
-		std::vector<double> sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u, h_, 1)
-			: current_task->find_solution(method::in_cond.e_u, h_, 0);
-		//sol_num.pop_back();
-		data_table->RowCount = sol_num.size();
-
-		while (x_current < x_max && index < sol_num.size() /*- 1*/) {
-			y_numerical = sol_num[index];
-			//h_current = method::m_vars.current_h[index];
-			//diff_current = method::m_vars.difference[index];
-			//local_err_current = method::m_vars.local_err[index];
-			//y_upd = method::m_vars.v_upd[index];
-			//div_current = method::m_vars.divisions[index];
-			//doub_current = method::m_vars.doublings[index];
-			chart1->Series[2]->Points->AddXY(x_current, y_numerical);
-			x_current += h_;
-
-			fill_datagrid(index);
-
-			++index;
-		}
-	}
-
-	if (!entry_v_positive->Checked && entry_v_negative->Checked) {
-
-		std::vector<double> sol_num_neg = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u_neg, h_, 1)
-			: current_task->find_solution(method::in_cond.e_u_neg, h_, 0);
-		//sol_num_neg.pop_back();
-		data_table_neg->RowCount = sol_num_neg.size();
-
-		while (x_current <= x_max && index < sol_num_neg.size() /*- 1*/) {
-			y_numerical_neg = sol_num_neg[index];
-			chart1->Series[1]->Points->AddXY(x_current, y_true_neg);
-			chart1->Series[3]->Points->AddXY(x_current, y_numerical_neg);
-			x_current += h_;
-
-			fill_datagrid(index);
-
-			++index;
-		}
-	}
-
-	if (entry_v_positive->Checked && entry_v_negative->Checked) {
-		std::vector<double> sol_num = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u, h_, 1)
-			: current_task->find_solution(method::in_cond.e_u, h_, 0);
-		//sol_num.pop_back();
-
-		current_task->clear_data();
-		std::vector<double> sol_num_neg = method::in_cond.control_local_err ? current_task->find_solution(method::in_cond.e_u_neg, h_, 1)
-			: current_task->find_solution(method::in_cond.e_u_neg, h_, 0);
-		//sol_num_neg.pop_back();
-
-		data_table->RowCount = sol_num.size();
-		data_table_neg->RowCount = sol_num_neg.size();
-
-		while (x_current <= x_max && index < sol_num.size() /*- 1*/) {
-			y_numerical = sol_num[index];
-			y_numerical_neg = sol_num_neg[index];
-			chart1->Series[2]->Points->AddXY(x_current, y_numerical);
-			chart1->Series[3]->Points->AddXY(x_current, y_numerical_neg);
-			x_current += h_;
-
-			fill_datagrid(index);
-
-			++index;
-		}
-	}
-
+	//} 
 	return System::Void();
 }
 

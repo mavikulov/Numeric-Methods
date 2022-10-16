@@ -226,7 +226,6 @@ namespace numericalmethodslab {
 			series2->LegendText = L"true solution, u0 = -1";
 			series2->Name = L"true_solution_negative";
 			series3->BorderDashStyle = System::Windows::Forms::DataVisualization::Charting::ChartDashStyle::Dot;
-			series3->BorderWidth = 3;
 			series3->ChartArea = L"ChartArea1";
 			series3->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series3->Color = System::Drawing::Color::Red;
@@ -235,7 +234,6 @@ namespace numericalmethodslab {
 			series3->Name = L"numerical_solution_positive";
 			series4->BorderColor = System::Drawing::Color::Transparent;
 			series4->BorderDashStyle = System::Windows::Forms::DataVisualization::Charting::ChartDashStyle::Dot;
-			series4->BorderWidth = 3;
 			series4->ChartArea = L"ChartArea1";
 			series4->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Spline;
 			series4->Legend = L"chart_legend";
@@ -709,7 +707,7 @@ namespace numericalmethodslab {
 		}
 #pragma endregion
 
-	private: double x_current, y_true, y_true_neg, y_numerical, y_numerical_neg, h_, x_min, x_max, max_steps;
+	private: double x_current, y_numerical, h_, x_min, x_max, max_steps;
 
 	private: double h_current, doub_current, div_current, diff_current, local_err_current, y_upd, abs_diff;
 
@@ -739,7 +737,7 @@ namespace numericalmethodslab {
 
 	private: System::Void draw_test_t();
 
-	private: System::Void draw_first_t();
+	//private: System::Void draw_first_t();
 
 	private: System::Void draw_second_t();
 
