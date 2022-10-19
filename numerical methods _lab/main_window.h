@@ -707,9 +707,7 @@ namespace numericalmethodslab {
 		}
 #pragma endregion
 
-	private: double x_current, y_numerical, h_, x_min, x_max, max_steps;
-
-	private: double h_current, doub_current, div_current, diff_current, local_err_current, y_upd, abs_diff;
+	public: void fill_datagrid(size_t, double, double, double, double, double, double, double, size_t, size_t, double);
 
 	private: method::task* current_task;
 
@@ -728,8 +726,6 @@ namespace numericalmethodslab {
 	private: System::Void clear_chart();
 
 	private: System::Void clear_table();
-
-	private: System::Void fill_datagrid(size_t);
 
 	private: System::Void draw_true_s();
 
