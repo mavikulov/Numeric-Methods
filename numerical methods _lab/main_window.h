@@ -93,6 +93,8 @@ namespace numericalmethodslab {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn9;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn10;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn11;
+	private: System::Windows::Forms::TextBox^ border_control_tb;
+	private: System::Windows::Forms::Label^ border_control;
 
 
 
@@ -172,6 +174,8 @@ namespace numericalmethodslab {
 			this->dataGridViewTextBoxColumn9 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn10 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn11 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->border_control = (gcnew System::Windows::Forms::Label());
+			this->border_control_tb = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->menu_gropbox->SuspendLayout();
 			this->parameters_gb->SuspendLayout();
@@ -313,6 +317,8 @@ namespace numericalmethodslab {
 			// 
 			// parameters_gb
 			// 
+			this->parameters_gb->Controls->Add(this->border_control_tb);
+			this->parameters_gb->Controls->Add(this->border_control);
 			this->parameters_gb->Controls->Add(this->entry_v_negative);
 			this->parameters_gb->Controls->Add(this->entry_v_positive);
 			this->parameters_gb->Controls->Add(this->x_max_tb);
@@ -328,7 +334,7 @@ namespace numericalmethodslab {
 			this->parameters_gb->Controls->Add(this->label1);
 			this->parameters_gb->Location = System::Drawing::Point(229, 12);
 			this->parameters_gb->Name = L"parameters_gb";
-			this->parameters_gb->Size = System::Drawing::Size(256, 252);
+			this->parameters_gb->Size = System::Drawing::Size(256, 266);
 			this->parameters_gb->TabIndex = 5;
 			this->parameters_gb->TabStop = false;
 			this->parameters_gb->Text = L"parameters";
@@ -337,7 +343,7 @@ namespace numericalmethodslab {
 			// 
 			this->entry_v_negative->AutoSize = true;
 			this->entry_v_negative->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->entry_v_negative->Location = System::Drawing::Point(98, 199);
+			this->entry_v_negative->Location = System::Drawing::Point(98, 212);
 			this->entry_v_negative->Name = L"entry_v_negative";
 			this->entry_v_negative->Size = System::Drawing::Size(76, 24);
 			this->entry_v_negative->TabIndex = 13;
@@ -348,7 +354,7 @@ namespace numericalmethodslab {
 			// 
 			this->entry_v_positive->AutoSize = true;
 			this->entry_v_positive->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->entry_v_positive->Location = System::Drawing::Point(6, 199);
+			this->entry_v_positive->Location = System::Drawing::Point(6, 212);
 			this->entry_v_positive->Name = L"entry_v_positive";
 			this->entry_v_positive->Size = System::Drawing::Size(70, 24);
 			this->entry_v_positive->TabIndex = 12;
@@ -399,7 +405,7 @@ namespace numericalmethodslab {
 			// 
 			this->control_step_cb->AutoSize = true;
 			this->control_step_cb->ForeColor = System::Drawing::SystemColors::Desktop;
-			this->control_step_cb->Location = System::Drawing::Point(6, 222);
+			this->control_step_cb->Location = System::Drawing::Point(6, 236);
 			this->control_step_cb->Name = L"control_step_cb";
 			this->control_step_cb->Size = System::Drawing::Size(219, 24);
 			this->control_step_cb->TabIndex = 7;
@@ -666,6 +672,26 @@ namespace numericalmethodslab {
 			this->dataGridViewTextBoxColumn11->HeaderText = L"|u_i - v_i|";
 			this->dataGridViewTextBoxColumn11->Name = L"dataGridViewTextBoxColumn11";
 			// 
+			// border_control
+			// 
+			this->border_control->AutoSize = true;
+			this->border_control->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->border_control->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->border_control->Location = System::Drawing::Point(7, 182);
+			this->border_control->Name = L"border_control";
+			this->border_control->Size = System::Drawing::Size(123, 20);
+			this->border_control->TabIndex = 14;
+			this->border_control->Text = L"border control = ";
+			this->border_control->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// border_control_tb
+			// 
+			this->border_control_tb->Location = System::Drawing::Point(125, 182);
+			this->border_control_tb->Name = L"border_control_tb";
+			this->border_control_tb->Size = System::Drawing::Size(122, 27);
+			this->border_control_tb->TabIndex = 15;
+			this->border_control_tb->Text = L"0,01";
+			// 
 			// main_window
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 20);
@@ -733,7 +759,7 @@ namespace numericalmethodslab {
 
 	private: System::Void draw_test_t();
 
-	//private: System::Void draw_first_t();
+	private: System::Void draw_first_t();
 
 	private: System::Void draw_second_t();
 

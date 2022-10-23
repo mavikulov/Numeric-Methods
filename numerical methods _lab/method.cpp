@@ -16,12 +16,31 @@ void method::task::clear_data() {
 
 	solution.clear();
 	true_solution.clear();
+
 }
 
 void method::task::initialize(double h_, double x_min_, double x_max_) {
 	step = in_cond.h;
 	x_min = in_cond.x_min;
 	x_max = in_cond.x_max;
+}
+
+void method::task::log_data(size_t index, double x_curr, double h_curr, double y_num,
+	double y_num_h, double diff_curr, double l_err_curr, double y_upd,
+	size_t div_count, size_t doub_count, double abs_diff) {
+	std::ofstream out("out.txt", std::fstream::app);
+	out << index << '\n';
+	out << x_curr << '\n';
+	out << h_curr << '\n';
+	out << y_num << '\n';
+	out << y_num_h << '\n';
+	out << diff_curr << '\n';
+	out << l_err_curr << '\n';
+	out << y_upd << '\n';
+	out << div_count << '\n';
+	out << doub_count << '\n';
+	out << abs_diff << '\n';
+	out << '\n';
 }
 
 void method::task::half_step(double e_u) {
@@ -45,12 +64,9 @@ void method::task::half_step(double e_u) {
 
 	solution[x_curr] = e_v;
 
-	while (x_curr <= x_max) {
-		//fill_datagrid(index, x_curr, step, solution[x_curr], half_step_d[index], solution[x_curr] - half_step_d[index],
-			//s, solution[x_curr] + s, div, doub, std::fabs(true_solution[x_curr] - solution[x_curr]));
-
+	while (x_curr <= x_max + in_cond.border_control) {
 		if (counter_h % 2 == 0) {
-			x_curr += step;
+			//x_curr += step;
 			k_1 = problem(dots[counter], 0);
 			k_2 = problem(dots[counter] + step / 2 * k_1, 0);
 			k_3 = problem(dots[counter] + step / 2 * k_2, 0);
@@ -69,24 +85,60 @@ void method::task::half_step(double e_u) {
 
 		if (half_step_d.size() % 2 != 0 && half_step_d.size() != 1) {
 			s = (half_step_d[counter_h] - dots[counter]) / 15;
-			if (std::fabs(s) >= in_cond.epsilon / 15 && std::abs(s) <= in_cond.epsilon) {
+			if (std::fabs(s) >= in_cond.epsilon / 32 && std::abs(s) <= in_cond.epsilon) {
+				x_curr += step; // 
 				counter_h = 0;
-				half_step_d.clear();
-				half_step_d.push_back(dots[counter]);
+				//half_step_d.clear();
+				//half_step_d.push_back(dots[counter]);
 				solution[x_curr] = dots[counter];
-				
 
+				log_data(
+					index,
+					x_curr,
+					step,
+					solution[x_curr],
+					half_step_d.back(),
+					solution[x_curr] - half_step_d.back(),
+					16 * s,
+					solution[x_curr] + 16 * s,
+					div,
+					doub,
+					std::fabs(true_solution[index] - solution[x_curr])
+				);
+				++index;
+
+				half_step_d.clear();
+				half_step_d.push_back(dots[counter]);	
 			}
 			if (std::fabs(s) < (in_cond.epsilon / 32)) {
+				x_curr += step; // 
 				step *= 2;
 
 				counter_h = 0;
-				half_step_d.clear();
-				half_step_d.push_back(dots[counter]);
+				//half_step_d.clear();
+				//half_step_d.push_back(dots[counter]);
 				solution[x_curr] = dots[counter];
+
+				log_data(
+					index,
+					x_curr,
+					step,
+					solution[x_curr],
+					half_step_d.back(),
+					solution[x_curr] - half_step_d.back(),
+					16 * s,
+					solution[x_curr] + 16 * s,
+					div,
+					doub,
+					std::fabs(true_solution[index] - solution[x_curr])
+				);
+				++index;
+
+				half_step_d.clear(); // 
+				half_step_d.push_back(dots[counter]); //
 			}
-			if (std::fabs(s) > in_cond.epsilon) /*else*/ {
-				x_curr -= step;
+			if (std::fabs(s) > in_cond.epsilon) {
+				//x_curr -= step; // 
 				x_curr_h -= step / 2;
 				step /= 2;
 
@@ -107,9 +159,10 @@ std::map<double, double> method::task::find_solution(double e_u, bool control){
 		double e_v = e_u;
 		dots.push_back(e_v);
 		size_t counter = 0;
+		size_t index = 0;
 		double k_1, k_2, k_3, k_4;
 
-		for (double x_curr = x_min; x_curr <= x_max; x_curr += step) {
+		for (double x_curr = x_min; x_curr <= x_max + in_cond.border_control; x_curr += step) {
 			solution[x_curr] = dots[counter];
 			k_1 = problem(dots[counter], 0);
 			k_2 = problem(dots[counter] + step / 2 * k_1, 0);
@@ -117,6 +170,21 @@ std::map<double, double> method::task::find_solution(double e_u, bool control){
 			k_4 = problem(dots[counter] + step * k_3, 0);
 			++counter;
 			dots.push_back(dots[counter - 1] + step / 6 * (k_1 + 2 * k_2 + 2 * k_3 + k_4));
+
+			log_data(
+				index,
+				x_curr,
+				step,
+				solution[x_curr],
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				std::fabs(true_solution[index] - solution[x_curr])
+			);
+			++index;
 		}
 	}
 
@@ -129,7 +197,7 @@ std::map<double, double> method::task::find_true_solution(double c_) {
 	double c = c_;
 	size_t index = 0;
 
-	while (x_curr <= x_max) {
+	while (x_curr <= x_max + in_cond.border_control) {
 		u = c / std::pow(std::exp(1.0), 5 / 2 * x_curr);
 		true_dots.push_back(u);
 		true_solution[x_curr] = true_dots[index];

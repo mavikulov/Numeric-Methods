@@ -44,6 +44,10 @@ System::Void numericalmethodslab::main_window::method_start_Click(System::Object
 	initialize_vars();
 	current_task->initialize(in_cond.h, in_cond.x_min, in_cond.x_max);
 
+	std::ofstream ofs;
+	ofs.open("out.txt", std::ofstream::out | std::ofstream::trunc);
+	ofs.close();
+
 	chart1->ChartAreas[0]->AxisX->Minimum = in_cond.x_min;
 	chart1->ChartAreas[0]->AxisX->Maximum = in_cond.x_max;
 	chart1->ChartAreas[0]->AxisX->Interval = 0.05;
@@ -55,8 +59,8 @@ System::Void numericalmethodslab::main_window::method_start_Click(System::Object
 
 	if (dynamic_cast<method::test_task*>(current_task))
 		draw_test_t();
-	//else if (dynamic_cast<method::first_task*>(current_task))
-		//draw_first_t();
+	else if (dynamic_cast<method::first_task*>(current_task))
+		draw_first_t();
 
 	return System::Void();
 }
@@ -74,21 +78,13 @@ System::Void numericalmethodslab::main_window::clear_all() {
 
 method::initial_conditions numericalmethodslab::main_window::initialize_vars() {
 
-	//double e_u = entry_v_positive->Checked ? 1 : 0;
-	//double e_u_neg = entry_v_negative->Checked ? (-1) : 0;
-	//double epsilon = System::Convert::ToDouble(local_err_tb->Text);
-	//double h = System::Convert::ToDouble(initial_step_tb->Text);
-	//double x_min = System::Convert::ToDouble(x_min_tb->Text);
-	//double x_max = System::Convert::ToDouble(x_max_tb->Text);
-	//int max_steps = System::Convert::ToInt32(max_stp_tb->Text);
-	//bool control_local_err = control_step_cb->Checked ? 1 : 0;
-
 	in_cond.e_u = entry_v_positive->Checked ? 1 : 0;
 	in_cond.e_u_neg = entry_v_negative->Checked ? (-1) : 0;
 	in_cond.epsilon = System::Convert::ToDouble(local_err_tb->Text);
 	in_cond.h = System::Convert::ToDouble(initial_step_tb->Text);
 	in_cond.x_min = System::Convert::ToDouble(x_min_tb->Text);
 	in_cond.x_max = System::Convert::ToDouble(x_max_tb->Text);
+	in_cond.border_control = System::Convert::ToDouble(border_control_tb->Text);
 	in_cond.max_steps = System::Convert::ToInt32(max_stp_tb->Text);
 	in_cond.control_local_err = control_step_cb->Checked ? 1 : 0;
 
@@ -202,8 +198,15 @@ System::Void numericalmethodslab::main_window::draw_test_t()
 	return System::Void();
 }
 
+System::Void numericalmethodslab::main_window::draw_first_t()
+{
+	draw_numerical_s();
+	return System::Void();
+}
+
 System::Void numericalmethodslab::main_window::draw_second_t()
 {
+	//draw_numerical_s();
 	return System::Void();
 }
 
