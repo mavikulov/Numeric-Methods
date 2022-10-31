@@ -13,6 +13,7 @@ void main(array<String^>^ args) {
 }
 
 extern method::initial_conditions in_cond;
+extern method::out out_data;
 
 System::Void numericalmethodslab::main_window::main_window_Load(System::Object^ sender, System::EventArgs^ e)
 {
@@ -32,6 +33,12 @@ System::Void numericalmethodslab::main_window::method_clear_Click(System::Object
 	clear_chart();
 	clear_table();
 
+	doub_c_tb->Text = "";
+	div_c_tb->Text = "";
+	max_err_tb->Text = "";
+	max_step_tb->Text = "";
+	min_step_tb->Text = "";
+	
 	return System::Void();
 }
 
@@ -44,23 +51,16 @@ System::Void numericalmethodslab::main_window::method_start_Click(System::Object
 	initialize_vars();
 	current_task->initialize(in_cond.h, in_cond.x_min, in_cond.x_max);
 
-	std::ofstream ofs;
-	ofs.open("out.txt", std::ofstream::out | std::ofstream::trunc);
-	ofs.close();
-
 	chart1->ChartAreas[0]->AxisX->Minimum = in_cond.x_min;
 	chart1->ChartAreas[0]->AxisX->Maximum = in_cond.x_max;
 	chart1->ChartAreas[0]->AxisX->Interval = 0.05;
-
-	//this->chart1->Series[0]; // true positive
-	//this->chart1->Series[1]; // true negative 
-	//this->chart1->Series[2]; // numerical positive
-	//this->chart1->Series[3]; // numerical negative
 
 	if (dynamic_cast<method::test_task*>(current_task))
 		draw_test_t();
 	else if (dynamic_cast<method::first_task*>(current_task))
 		draw_first_t();
+
+	fill_datagrid();
 
 	return System::Void();
 }
@@ -113,37 +113,91 @@ System::Void numericalmethodslab::main_window::clear_table()
 	return System::Void();
 }
 
-void numericalmethodslab::main_window::fill_datagrid(size_t index, double x_curr, double h_curr, double y_num,
-															 double y_num_h, double diff_curr, double l_err_curr, double y_upd,
-															size_t div_count, size_t doub_count, double abs_diff)
+void numericalmethodslab::main_window::fill_datagrid()
 {
-	if (entry_v_positive->Checked) {
-		data_table->Rows[index]->Cells[0]->Value = index;
-		data_table->Rows[index]->Cells[1]->Value = x_curr;
-		data_table->Rows[index]->Cells[2]->Value = h_curr;
-		data_table->Rows[index]->Cells[3]->Value = y_num;
-		data_table->Rows[index]->Cells[4]->Value = y_num_h;
-		data_table->Rows[index]->Cells[5]->Value = diff_curr;
-		data_table->Rows[index]->Cells[6]->Value = l_err_curr;
-		data_table->Rows[index]->Cells[7]->Value = y_upd;
-		data_table->Rows[index]->Cells[8]->Value = div_count;
-		data_table->Rows[index]->Cells[9]->Value = doub_count;
-		data_table->Rows[index]->Cells[10]->Value = abs_diff;
-	}
+	//out_data.logs.push_back(std::make_tuple(x_curr, h_curr, y_num, y_num_h, diff_curr, l_err_curr, y_upd, div_count, doub_count, abs_diff));
+	data_table->RowCount = out_data.logs.size();
+	data_table_neg->RowCount = out_data.logs.size();
+	for (size_t i = 0; i < out_data.logs.size(); ++i) {
+		if (entry_v_positive->Checked) {
+			data_table->Rows[i]->Cells[0]->Value = i;
+			data_table->Rows[i]->Cells[1]->Value = std::get<0>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[2]->Value = std::get<1>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[3]->Value = std::get<2>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[4]->Value = std::get<3>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[5]->Value = std::get<4>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[6]->Value = std::get<5>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[7]->Value = std::get<6>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[8]->Value = std::get<7>(out_data.logs[i]);
+			data_table->Rows[i]->Cells[9]->Value = std::get<8>(out_data.logs[i]);
+			if (!dynamic_cast<method::test_task*>(current_task))
+				data_table->Rows[i]->Cells[10]->Value = 0;
+			else data_table->Rows[i]->Cells[10]->Value = std::get<9>(out_data.logs[i]);
 
-	if (entry_v_negative->Checked) {
-		data_table_neg->Rows[index]->Cells[0]->Value = index;
-		data_table_neg->Rows[index]->Cells[1]->Value = x_curr;
-		data_table_neg->Rows[index]->Cells[2]->Value = h_curr;
-		data_table_neg->Rows[index]->Cells[3]->Value = y_num;
-		data_table_neg->Rows[index]->Cells[4]->Value = y_num_h;
-		data_table_neg->Rows[index]->Cells[5]->Value = diff_curr;
-		data_table_neg->Rows[index]->Cells[6]->Value = l_err_curr;
-		data_table_neg->Rows[index]->Cells[7]->Value = y_upd;
-		data_table_neg->Rows[index]->Cells[8]->Value = div_count;
-		data_table_neg->Rows[index]->Cells[9]->Value = doub_count;
-		data_table_neg->Rows[index]->Cells[10]->Value = abs_diff;
+			Int32 doub_c = 0, div_c = 0;
+			Double max = System::Convert::ToDouble(data_table->Rows[0]->Cells[10]->Value);
+			Double max_step = System::Convert::ToDouble(data_table->Rows[0]->Cells[2]->Value);
+			Double min_step = System::Convert::ToDouble(data_table->Rows[0]->Cells[2]->Value);
 
+			for (size_t i = 0; i < data_table->Rows->Count; ++i) {
+				doub_c += System::Convert::ToInt32(data_table->Rows[i]->Cells[9]->Value);
+				div_c += System::Convert::ToInt32(data_table->Rows[i]->Cells[8]->Value);
+
+				if (System::Convert::ToDouble(data_table->Rows[i]->Cells[10]->Value) > max)
+					max = System::Convert::ToDouble(data_table->Rows[i]->Cells[10]->Value);
+
+				if (System::Convert::ToDouble(data_table->Rows[i]->Cells[2]->Value) > max_step)
+					max_step = System::Convert::ToDouble(data_table->Rows[i]->Cells[2]->Value);
+				if (System::Convert::ToDouble(data_table->Rows[i]->Cells[2]->Value) < min_step)
+					min_step = System::Convert::ToDouble(data_table->Rows[i]->Cells[2]->Value);
+
+			}
+			doub_c_tb->Text = System::Convert::ToString(doub_c);
+			div_c_tb->Text = System::Convert::ToString(div_c);
+			max_err_tb->Text = System::Convert::ToString(max);
+			max_step_tb->Text = System::Convert::ToString(max_step);
+			min_step_tb->Text = System::Convert::ToString(min_step);
+		}
+
+		if (entry_v_negative->Checked) {
+			data_table_neg->Rows[i]->Cells[0]->Value = i;
+			data_table_neg->Rows[i]->Cells[1]->Value = std::get<0>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[2]->Value = std::get<1>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[3]->Value = std::get<2>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[4]->Value = std::get<3>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[5]->Value = std::get<4>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[6]->Value = std::get<5>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[7]->Value = std::get<6>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[8]->Value = std::get<7>(out_data.logs[i]);
+			data_table_neg->Rows[i]->Cells[9]->Value = std::get<8>(out_data.logs[i]);
+			if (!dynamic_cast<method::test_task*>(current_task))
+				data_table_neg->Rows[i]->Cells[10]->Value = 0;
+			else data_table_neg->Rows[i]->Cells[10]->Value = std::get<9>(out_data.logs[i]);
+
+			Int32 doub_c = 0, div_c = 0;
+			Double max = System::Convert::ToDouble(data_table_neg->Rows[0]->Cells[10]->Value);
+			Double max_step = System::Convert::ToDouble(data_table_neg->Rows[0]->Cells[2]->Value);
+			Double min_step = System::Convert::ToDouble(data_table_neg->Rows[0]->Cells[2]->Value);
+
+			for (size_t i = 0; i < data_table_neg->Rows->Count; ++i) {
+				doub_c += System::Convert::ToInt32(data_table_neg->Rows[i]->Cells[9]->Value);
+				div_c += System::Convert::ToInt32(data_table_neg->Rows[i]->Cells[8]->Value);
+
+				if (System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[10]->Value) > max)
+					max = System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[10]->Value);
+
+				if (System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[2]->Value) > max_step)
+					max_step = System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[2]->Value);
+				if (System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[2]->Value) < min_step)
+					min_step = System::Convert::ToDouble(data_table_neg->Rows[i]->Cells[2]->Value);
+
+			}
+			doub_c_tb->Text = System::Convert::ToString(doub_c);
+			div_c_tb->Text = System::Convert::ToString(div_c);
+			max_err_tb->Text = System::Convert::ToString(max);
+			max_step_tb->Text = System::Convert::ToString(max_step);
+			min_step_tb->Text = System::Convert::ToString(min_step);
+		}
 	}
 }
 

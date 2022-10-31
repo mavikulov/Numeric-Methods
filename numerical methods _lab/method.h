@@ -19,6 +19,10 @@ namespace method {
 		 bool   control_local_err;
 	};
 
+	struct out {
+		std::vector<std::tuple<double, double, double, double, double, double, double, size_t, size_t, double>> logs;
+	};
+
 	class task {
 	public:
 		task() = default;
@@ -33,9 +37,9 @@ namespace method {
 
 		void half_step(double e_u);
 
-		void log_data(size_t index, double x_curr, double h_curr, double y_num,
-			double y_num_h, double diff_curr, double l_err_curr, double y_upd,
-			size_t div_count, size_t doub_count, double abs_diff);
+		void log_data(double x_curr, double h_curr, double y_num,
+				double y_num_h, double diff_curr, double l_err_curr, double y_upd,
+				size_t div_count, size_t doub_count, double abs_diff);
 
 		std::map<double, double> find_solution(double e_u, bool control);
 

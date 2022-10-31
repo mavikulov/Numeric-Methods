@@ -1,6 +1,7 @@
 #include "main_window.h"
 
 method::initial_conditions in_cond;
+method::out out_data;
 
 void method::task::clear_data() {
 	dots.clear();
@@ -16,6 +17,7 @@ void method::task::clear_data() {
 
 	solution.clear();
 	true_solution.clear();
+	out_data.logs.clear();
 
 }
 
@@ -25,22 +27,10 @@ void method::task::initialize(double h_, double x_min_, double x_max_) {
 	x_max = in_cond.x_max;
 }
 
-void method::task::log_data(size_t index, double x_curr, double h_curr, double y_num,
-	double y_num_h, double diff_curr, double l_err_curr, double y_upd,
-	size_t div_count, size_t doub_count, double abs_diff) {
-	std::ofstream out("out.txt", std::fstream::app);
-	out << index << '\n';
-	out << x_curr << '\n';
-	out << h_curr << '\n';
-	out << y_num << '\n';
-	out << y_num_h << '\n';
-	out << diff_curr << '\n';
-	out << l_err_curr << '\n';
-	out << y_upd << '\n';
-	out << div_count << '\n';
-	out << doub_count << '\n';
-	out << abs_diff << '\n';
-	out << '\n';
+void method::task::log_data(double x_curr, double h_curr, double y_num,
+		double y_num_h, double diff_curr, double l_err_curr, double y_upd,
+		size_t div_count, size_t doub_count, double abs_diff) {
+	out_data.logs.push_back(std::make_tuple(x_curr, h_curr, y_num, y_num_h, diff_curr, l_err_curr, y_upd, div_count, doub_count, abs_diff));
 }
 
 void method::task::half_step(double e_u) {
@@ -51,7 +41,6 @@ void method::task::half_step(double e_u) {
 	dots.push_back(e_v);
 
 	size_t counter = 0, counter_h = 0;
-	size_t div = 0, doub = 0;
 	size_t index = 0;
 
 	double k_1, k_2, k_3, k_4;
@@ -61,10 +50,13 @@ void method::task::half_step(double e_u) {
 
 	double x_curr = x_min;
 	double x_curr_h = x_min;
+	double curr_step = 0;
 
 	solution[x_curr] = e_v;
 
 	while (x_curr <= x_max + in_cond.border_control) {
+		size_t div = 0, doub = 0;
+		curr_step = step;
 		if (counter_h % 2 == 0) {
 			//x_curr += step;
 			k_1 = problem(dots[counter], 0);
@@ -93,9 +85,9 @@ void method::task::half_step(double e_u) {
 				solution[x_curr] = dots[counter];
 
 				log_data(
-					index,
+					//index,
 					x_curr,
-					step,
+					curr_step,
 					solution[x_curr],
 					half_step_d.back(),
 					solution[x_curr] - half_step_d.back(),
@@ -113,6 +105,7 @@ void method::task::half_step(double e_u) {
 			if (std::fabs(s) < (in_cond.epsilon / 32)) {
 				x_curr += step; // 
 				step *= 2;
+				doub = 1;
 
 				counter_h = 0;
 				//half_step_d.clear();
@@ -120,9 +113,9 @@ void method::task::half_step(double e_u) {
 				solution[x_curr] = dots[counter];
 
 				log_data(
-					index,
+					//index,
 					x_curr,
-					step,
+					curr_step,
 					solution[x_curr],
 					half_step_d.back(),
 					solution[x_curr] - half_step_d.back(),
@@ -141,6 +134,7 @@ void method::task::half_step(double e_u) {
 				//x_curr -= step; // 
 				x_curr_h -= step / 2;
 				step /= 2;
+				div = 1;
 
 				--counter;
 				dots.pop_back();
@@ -172,7 +166,7 @@ std::map<double, double> method::task::find_solution(double e_u, bool control){
 			dots.push_back(dots[counter - 1] + step / 6 * (k_1 + 2 * k_2 + 2 * k_3 + k_4));
 
 			log_data(
-				index,
+				//index,
 				x_curr,
 				step,
 				solution[x_curr],

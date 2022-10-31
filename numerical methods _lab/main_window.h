@@ -95,6 +95,18 @@ namespace numericalmethodslab {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn11;
 	private: System::Windows::Forms::TextBox^ border_control_tb;
 	private: System::Windows::Forms::Label^ border_control;
+	private: System::Windows::Forms::TextBox^ div_c_tb;
+
+	private: System::Windows::Forms::TextBox^ doub_c_tb;
+
+	private: System::Windows::Forms::Label^ label10;
+	private: System::Windows::Forms::Label^ label9;
+	private: System::Windows::Forms::Label^ label8;
+	private: System::Windows::Forms::Label^ label7;
+	private: System::Windows::Forms::Label^ label6;
+	private: System::Windows::Forms::TextBox^ max_err_tb;
+	private: System::Windows::Forms::TextBox^ min_step_tb;
+	private: System::Windows::Forms::TextBox^ max_step_tb;
 
 
 
@@ -131,6 +143,8 @@ namespace numericalmethodslab {
 			this->second_task = (gcnew System::Windows::Forms::Button());
 			this->first_task = (gcnew System::Windows::Forms::Button());
 			this->parameters_gb = (gcnew System::Windows::Forms::GroupBox());
+			this->border_control_tb = (gcnew System::Windows::Forms::TextBox());
+			this->border_control = (gcnew System::Windows::Forms::Label());
 			this->entry_v_negative = (gcnew System::Windows::Forms::CheckBox());
 			this->entry_v_positive = (gcnew System::Windows::Forms::CheckBox());
 			this->x_max_tb = (gcnew System::Windows::Forms::TextBox());
@@ -145,6 +159,16 @@ namespace numericalmethodslab {
 			this->initial_step_tb = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->help_gb = (gcnew System::Windows::Forms::GroupBox());
+			this->max_err_tb = (gcnew System::Windows::Forms::TextBox());
+			this->min_step_tb = (gcnew System::Windows::Forms::TextBox());
+			this->max_step_tb = (gcnew System::Windows::Forms::TextBox());
+			this->div_c_tb = (gcnew System::Windows::Forms::TextBox());
+			this->doub_c_tb = (gcnew System::Windows::Forms::TextBox());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->label8 = (gcnew System::Windows::Forms::Label());
+			this->label7 = (gcnew System::Windows::Forms::Label());
+			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->method_start = (gcnew System::Windows::Forms::Button());
 			this->method_clear = (gcnew System::Windows::Forms::Button());
 			this->data_table = (gcnew System::Windows::Forms::DataGridView());
@@ -174,11 +198,10 @@ namespace numericalmethodslab {
 			this->dataGridViewTextBoxColumn9 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn10 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn11 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->border_control = (gcnew System::Windows::Forms::Label());
-			this->border_control_tb = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chart1))->BeginInit();
 			this->menu_gropbox->SuspendLayout();
 			this->parameters_gb->SuspendLayout();
+			this->help_gb->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table))->BeginInit();
 			this->tab_table->SuspendLayout();
 			this->page_pos->SuspendLayout();
@@ -339,6 +362,26 @@ namespace numericalmethodslab {
 			this->parameters_gb->TabStop = false;
 			this->parameters_gb->Text = L"parameters";
 			// 
+			// border_control_tb
+			// 
+			this->border_control_tb->Location = System::Drawing::Point(125, 182);
+			this->border_control_tb->Name = L"border_control_tb";
+			this->border_control_tb->Size = System::Drawing::Size(122, 27);
+			this->border_control_tb->TabIndex = 15;
+			this->border_control_tb->Text = L"0,01";
+			// 
+			// border_control
+			// 
+			this->border_control->AutoSize = true;
+			this->border_control->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->border_control->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->border_control->Location = System::Drawing::Point(7, 182);
+			this->border_control->Name = L"border_control";
+			this->border_control->Size = System::Drawing::Size(123, 20);
+			this->border_control->TabIndex = 14;
+			this->border_control->Text = L"border control = ";
+			this->border_control->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
 			// entry_v_negative
 			// 
 			this->entry_v_negative->AutoSize = true;
@@ -474,12 +517,117 @@ namespace numericalmethodslab {
 			// 
 			// help_gb
 			// 
+			this->help_gb->Controls->Add(this->max_err_tb);
+			this->help_gb->Controls->Add(this->min_step_tb);
+			this->help_gb->Controls->Add(this->max_step_tb);
+			this->help_gb->Controls->Add(this->div_c_tb);
+			this->help_gb->Controls->Add(this->doub_c_tb);
+			this->help_gb->Controls->Add(this->label10);
+			this->help_gb->Controls->Add(this->label9);
+			this->help_gb->Controls->Add(this->label8);
+			this->help_gb->Controls->Add(this->label7);
+			this->help_gb->Controls->Add(this->label6);
 			this->help_gb->Location = System::Drawing::Point(800, 387);
 			this->help_gb->Name = L"help_gb";
 			this->help_gb->Size = System::Drawing::Size(378, 267);
 			this->help_gb->TabIndex = 6;
 			this->help_gb->TabStop = false;
 			this->help_gb->Text = L"help";
+			// 
+			// max_err_tb
+			// 
+			this->max_err_tb->Location = System::Drawing::Point(150, 212);
+			this->max_err_tb->Name = L"max_err_tb";
+			this->max_err_tb->Size = System::Drawing::Size(100, 27);
+			this->max_err_tb->TabIndex = 25;
+			// 
+			// min_step_tb
+			// 
+			this->min_step_tb->Location = System::Drawing::Point(150, 169);
+			this->min_step_tb->Name = L"min_step_tb";
+			this->min_step_tb->Size = System::Drawing::Size(100, 27);
+			this->min_step_tb->TabIndex = 24;
+			// 
+			// max_step_tb
+			// 
+			this->max_step_tb->Location = System::Drawing::Point(150, 120);
+			this->max_step_tb->Name = L"max_step_tb";
+			this->max_step_tb->Size = System::Drawing::Size(100, 27);
+			this->max_step_tb->TabIndex = 23;
+			// 
+			// div_c_tb
+			// 
+			this->div_c_tb->Location = System::Drawing::Point(150, 77);
+			this->div_c_tb->Name = L"div_c_tb";
+			this->div_c_tb->Size = System::Drawing::Size(100, 27);
+			this->div_c_tb->TabIndex = 22;
+			// 
+			// doub_c_tb
+			// 
+			this->doub_c_tb->Location = System::Drawing::Point(150, 33);
+			this->doub_c_tb->Name = L"doub_c_tb";
+			this->doub_c_tb->Size = System::Drawing::Size(100, 27);
+			this->doub_c_tb->TabIndex = 21;
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label10->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label10->Location = System::Drawing::Point(10, 212);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(91, 20);
+			this->label10->TabIndex = 20;
+			this->label10->Text = L"max error = ";
+			this->label10->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label9->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label9->Location = System::Drawing::Point(10, 169);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(84, 20);
+			this->label9->TabIndex = 19;
+			this->label9->Text = L"min step = ";
+			this->label9->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// label8
+			// 
+			this->label8->AutoSize = true;
+			this->label8->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label8->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label8->Location = System::Drawing::Point(10, 120);
+			this->label8->Name = L"label8";
+			this->label8->Size = System::Drawing::Size(87, 20);
+			this->label8->TabIndex = 18;
+			this->label8->Text = L"max step = ";
+			this->label8->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// label7
+			// 
+			this->label7->AutoSize = true;
+			this->label7->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label7->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label7->Location = System::Drawing::Point(10, 77);
+			this->label7->Name = L"label7";
+			this->label7->Size = System::Drawing::Size(125, 20);
+			this->label7->TabIndex = 17;
+			this->label7->Text = L"divisions count = ";
+			this->label7->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->FlatStyle = System::Windows::Forms::FlatStyle::System;
+			this->label6->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->label6->Location = System::Drawing::Point(10, 33);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(134, 20);
+			this->label6->TabIndex = 16;
+			this->label6->Text = L"doublings count = ";
+			this->label6->TextAlign = System::Drawing::ContentAlignment::TopCenter;
 			// 
 			// method_start
 			// 
@@ -511,7 +659,7 @@ namespace numericalmethodslab {
 					this->h_index, this->v_index, this->v_index_corr, this->v_diff, this->loc_err_est, this->v_index_updated, this->division, this->doubling,
 					this->abs_difference
 			});
-			this->data_table->Location = System::Drawing::Point(2, 6);
+			this->data_table->Location = System::Drawing::Point(3, 0);
 			this->data_table->Name = L"data_table";
 			this->data_table->Size = System::Drawing::Size(565, 251);
 			this->data_table->TabIndex = 10;
@@ -672,26 +820,6 @@ namespace numericalmethodslab {
 			this->dataGridViewTextBoxColumn11->HeaderText = L"|u_i - v_i|";
 			this->dataGridViewTextBoxColumn11->Name = L"dataGridViewTextBoxColumn11";
 			// 
-			// border_control
-			// 
-			this->border_control->AutoSize = true;
-			this->border_control->FlatStyle = System::Windows::Forms::FlatStyle::System;
-			this->border_control->ForeColor = System::Drawing::SystemColors::ControlText;
-			this->border_control->Location = System::Drawing::Point(7, 182);
-			this->border_control->Name = L"border_control";
-			this->border_control->Size = System::Drawing::Size(123, 20);
-			this->border_control->TabIndex = 14;
-			this->border_control->Text = L"border control = ";
-			this->border_control->TextAlign = System::Drawing::ContentAlignment::TopCenter;
-			// 
-			// border_control_tb
-			// 
-			this->border_control_tb->Location = System::Drawing::Point(125, 182);
-			this->border_control_tb->Name = L"border_control_tb";
-			this->border_control_tb->Size = System::Drawing::Size(122, 27);
-			this->border_control_tb->TabIndex = 15;
-			this->border_control_tb->Text = L"0,01";
-			// 
 			// main_window
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 20);
@@ -723,6 +851,8 @@ namespace numericalmethodslab {
 			this->menu_gropbox->ResumeLayout(false);
 			this->parameters_gb->ResumeLayout(false);
 			this->parameters_gb->PerformLayout();
+			this->help_gb->ResumeLayout(false);
+			this->help_gb->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->data_table))->EndInit();
 			this->tab_table->ResumeLayout(false);
 			this->page_pos->ResumeLayout(false);
@@ -733,7 +863,7 @@ namespace numericalmethodslab {
 		}
 #pragma endregion
 
-	public: void fill_datagrid(size_t, double, double, double, double, double, double, double, size_t, size_t, double);
+	private: void fill_datagrid();
 
 	private: method::task* current_task;
 
