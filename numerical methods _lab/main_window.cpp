@@ -270,7 +270,7 @@ System::Void numericalmethodslab::main_window::test_task_Click(System::Object^ s
 
 	test_task->ForeColor = Color::FromArgb(144, 144, 144);
 	first_task->ForeColor = Color::FromArgb(255, 255, 255);
-	second_task->ForeColor = Color::FromArgb(255, 255, 255);
+	//second_task->ForeColor = Color::FromArgb(255, 255, 255);
 
 	return System::Void();
 }
@@ -281,7 +281,7 @@ System::Void numericalmethodslab::main_window::first_task_Click(System::Object^ 
 
 	test_task->ForeColor = Color::FromArgb(255, 255, 255);
 	first_task->ForeColor = Color::FromArgb(144, 144, 144);
-	second_task->ForeColor = Color::FromArgb(255, 255, 255);
+	//second_task->ForeColor = Color::FromArgb(255, 255, 255);
 
 	return System::Void();
 }
@@ -292,7 +292,7 @@ System::Void numericalmethodslab::main_window::second_task_Click(System::Object^
 
 	test_task->ForeColor = Color::FromArgb(255, 255, 255);
 	first_task->ForeColor = Color::FromArgb(255, 255, 255);
-	second_task->ForeColor = Color::FromArgb(144, 144, 144);
+	//second_task->ForeColor = Color::FromArgb(144, 144, 144);
 
 	return System::Void();
 }

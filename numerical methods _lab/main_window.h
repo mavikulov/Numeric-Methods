@@ -40,7 +40,7 @@ namespace numericalmethodslab {
 
 	private: System::Windows::Forms::DataVisualization::Charting::Chart^ chart1;
 	private: System::Windows::Forms::GroupBox^ menu_gropbox;
-	private: System::Windows::Forms::Button^ second_task;
+
 	private: System::Windows::Forms::Button^ first_task;
 	private: System::Windows::Forms::GroupBox^ parameters_gb;
 	private: System::Windows::Forms::GroupBox^ help_gb;
@@ -140,7 +140,6 @@ namespace numericalmethodslab {
 			this->chart1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			this->menu_gropbox = (gcnew System::Windows::Forms::GroupBox());
 			this->exit_button = (gcnew System::Windows::Forms::Button());
-			this->second_task = (gcnew System::Windows::Forms::Button());
 			this->first_task = (gcnew System::Windows::Forms::Button());
 			this->parameters_gb = (gcnew System::Windows::Forms::GroupBox());
 			this->border_control_tb = (gcnew System::Windows::Forms::TextBox());
@@ -217,7 +216,7 @@ namespace numericalmethodslab {
 			this->test_task->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->test_task->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->test_task->Location = System::Drawing::Point(6, 182);
+			this->test_task->Location = System::Drawing::Point(6, 240);
 			this->test_task->Name = L"test_task";
 			this->test_task->Size = System::Drawing::Size(211, 50);
 			this->test_task->TabIndex = 0;
@@ -279,7 +278,6 @@ namespace numericalmethodslab {
 			this->menu_gropbox->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(66)), static_cast<System::Int32>(static_cast<System::Byte>(66)),
 				static_cast<System::Int32>(static_cast<System::Byte>(66)));
 			this->menu_gropbox->Controls->Add(this->exit_button);
-			this->menu_gropbox->Controls->Add(this->second_task);
 			this->menu_gropbox->Controls->Add(this->first_task);
 			this->menu_gropbox->Controls->Add(this->test_task);
 			this->menu_gropbox->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
@@ -306,22 +304,6 @@ namespace numericalmethodslab {
 			this->exit_button->UseVisualStyleBackColor = false;
 			this->exit_button->Click += gcnew System::EventHandler(this, &main_window::exit_button_Click);
 			// 
-			// second_task
-			// 
-			this->second_task->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(66)), static_cast<System::Int32>(static_cast<System::Byte>(66)),
-				static_cast<System::Int32>(static_cast<System::Byte>(66)));
-			this->second_task->FlatAppearance->BorderSize = 0;
-			this->second_task->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->second_task->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
-				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->second_task->Location = System::Drawing::Point(6, 302);
-			this->second_task->Name = L"second_task";
-			this->second_task->Size = System::Drawing::Size(211, 54);
-			this->second_task->TabIndex = 2;
-			this->second_task->Text = L"second task";
-			this->second_task->UseVisualStyleBackColor = false;
-			this->second_task->Click += gcnew System::EventHandler(this, &main_window::second_task_Click);
-			// 
 			// first_task
 			// 
 			this->first_task->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(66)), static_cast<System::Int32>(static_cast<System::Byte>(66)),
@@ -330,7 +312,7 @@ namespace numericalmethodslab {
 			this->first_task->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->first_task->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(255)), static_cast<System::Int32>(static_cast<System::Byte>(255)),
 				static_cast<System::Int32>(static_cast<System::Byte>(255)));
-			this->first_task->Location = System::Drawing::Point(6, 242);
+			this->first_task->Location = System::Drawing::Point(6, 298);
 			this->first_task->Name = L"first_task";
 			this->first_task->Size = System::Drawing::Size(211, 54);
 			this->first_task->TabIndex = 1;
@@ -538,35 +520,35 @@ namespace numericalmethodslab {
 			// 
 			this->max_err_tb->Location = System::Drawing::Point(150, 212);
 			this->max_err_tb->Name = L"max_err_tb";
-			this->max_err_tb->Size = System::Drawing::Size(100, 27);
+			this->max_err_tb->Size = System::Drawing::Size(222, 27);
 			this->max_err_tb->TabIndex = 25;
 			// 
 			// min_step_tb
 			// 
 			this->min_step_tb->Location = System::Drawing::Point(150, 169);
 			this->min_step_tb->Name = L"min_step_tb";
-			this->min_step_tb->Size = System::Drawing::Size(100, 27);
+			this->min_step_tb->Size = System::Drawing::Size(222, 27);
 			this->min_step_tb->TabIndex = 24;
 			// 
 			// max_step_tb
 			// 
 			this->max_step_tb->Location = System::Drawing::Point(150, 120);
 			this->max_step_tb->Name = L"max_step_tb";
-			this->max_step_tb->Size = System::Drawing::Size(100, 27);
+			this->max_step_tb->Size = System::Drawing::Size(222, 27);
 			this->max_step_tb->TabIndex = 23;
 			// 
 			// div_c_tb
 			// 
 			this->div_c_tb->Location = System::Drawing::Point(150, 77);
 			this->div_c_tb->Name = L"div_c_tb";
-			this->div_c_tb->Size = System::Drawing::Size(100, 27);
+			this->div_c_tb->Size = System::Drawing::Size(222, 27);
 			this->div_c_tb->TabIndex = 22;
 			// 
 			// doub_c_tb
 			// 
 			this->doub_c_tb->Location = System::Drawing::Point(150, 33);
 			this->doub_c_tb->Name = L"doub_c_tb";
-			this->doub_c_tb->Size = System::Drawing::Size(100, 27);
+			this->doub_c_tb->Size = System::Drawing::Size(222, 27);
 			this->doub_c_tb->TabIndex = 21;
 			// 
 			// label10
@@ -659,9 +641,9 @@ namespace numericalmethodslab {
 					this->h_index, this->v_index, this->v_index_corr, this->v_diff, this->loc_err_est, this->v_index_updated, this->division, this->doubling,
 					this->abs_difference
 			});
-			this->data_table->Location = System::Drawing::Point(3, 0);
+			this->data_table->Location = System::Drawing::Point(-4, 0);
 			this->data_table->Name = L"data_table";
-			this->data_table->Size = System::Drawing::Size(565, 251);
+			this->data_table->Size = System::Drawing::Size(575, 264);
 			this->data_table->TabIndex = 10;
 			// 
 			// index
